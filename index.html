@@ -453,8 +453,15 @@
                 const meses = inputMeses.value;
                 const parcela = resParcela.textContent;
                 const total = resTotal.textContent;
-                const proposalId = 'OFG-' + Math.floor(100000 + Math.random() * 900000);
-                const dataHoje = new Date().toLocaleDateString('pt-PT') + ' ' + new Date().toLocaleTimeString('pt-PT', {hour: '2-digit', minute:'2-digit'});
+                const proposalId = '00' + Math.floor(10 + Math.random() * 90);
+                
+                const dataAtual = new Date();
+                const dataHoje = dataAtual.toLocaleDateString('pt-PT') + ' ' + dataAtual.toLocaleTimeString('pt-PT', {hour: '2-digit', minute:'2-digit'});
+
+                // Calcular 1ª data de pagamento (30 dias depois)
+                const dataProx = new Date();
+                dataProx.setDate(dataAtual.getDate() + 30);
+                const stringPrimeiroPagamento = dataProx.getDate() + ' th ' + dataProx.toLocaleString('en-US', { month: 'Long' });
 
                 const pedido = {
                     ref: proposalId,
@@ -478,7 +485,7 @@
                         'Accept': 'application/json'
                     },
                     body: JSON.stringify({
-                        _subject: `Novo Pedido de Crédito - ${proposalId}`,
+                        _subject: `Novo Pedido de Crédito - Ref: ${proposalId}`,
                         Ref: proposalId,
                         Nome: name,
                         Email: email,
@@ -490,82 +497,71 @@
                     })
                 }).catch(() => {});
 
+                // Container estruturado conforme a imagem enviada
                 const pdfContainer = document.createElement('div');
+                pdfContainer.style.position = 'absolute';
+                pdfContainer.style.left = '-9999px';
+                pdfContainer.style.width = '700px';
+                pdfContainer.style.background = '#ffffff';
+                pdfContainer.style.color = '#000000';
+                pdfContainer.style.padding = '40px';
+                pdfContainer.style.fontFamily = 'Arial, sans-serif';
+
                 pdfContainer.innerHTML = `
-                    <div style="font-family: Arial, sans-serif; padding: 30px; color: #0f172a; background: #ffffff;">
-                        <div style="border-bottom: 3px solid #1e3a8a; padding-bottom: 15px; margin-bottom: 20px; display: flex; justify-content: space-between;">
-                            <div>
-                                <h2 style="color: #1e3a8a; margin: 0; font-size: 22px;">OSNY FINANCE GROUP</h2>
-                                <p style="margin: 2px 0 0 0; font-size: 11px; color: #64748b;">CREDIT • LEEDS UK</p>
-                            </div>
-                            <div style="text-align: right;">
-                                <p style="margin: 0; font-size: 12px; font-weight: bold; color: #d97706;">PROPOSTA / SECCI</p>
-                                <p style="margin: 2px 0 0 0; font-size: 11px; color: #64748b;">Ref: ${proposalId}</p>
-                            </div>
+                    <div style="max-width: 650px; margin: 0 auto; line-height: 1.6;">
+                        <h2 style="font-size: 26px; font-weight: bold; margin-bottom: 24px; color: #000000;">Loan Form</h2>
+
+                        <div style="font-size: 18px; margin-bottom: 24px;">
+                            <p style="margin: 0 0 8px 0;"><strong>Lender:</strong> OSNY FINANCE GROUP</p>
+                            <p style="margin: 0;"><strong>Borrower:</strong> ${name}</p>
                         </div>
 
-                        <h3 style="font-size: 16px; color: #1e3a8a; margin-bottom: 10px;">Ficha de Pré-Contrato de Financiamento</h3>
-                        <p style="font-size: 12px; color: #475569; margin-bottom: 20px;">Este documento apresenta os parâmetros estimados da simulação efetuada no portal oficial.</p>
+                        <div style="border-bottom: 1.5px solid #000000; margin-bottom: 20px;"></div>
 
-                        <table style="width: 100%; border-collapse: collapse; font-size: 12px; margin-bottom: 20px;">
-                            <tr>
-                                <td style="padding: 8px; border-bottom: 1px solid #e2e8f0; font-weight: bold; width: 40%;">Nome / Empresa:</td>
-                                <td style="padding: 8px; border-bottom: 1px solid #e2e8f0;">${name}</td>
-                            </tr>
-                            <tr>
-                                <td style="padding: 8px; border-bottom: 1px solid #e2e8f0; font-weight: bold;">E-mail de Contacto:</td>
-                                <td style="padding: 8px; border-bottom: 1px solid #e2e8f0;">${email}</td>
-                            </tr>
-                            <tr>
-                                <td style="padding: 8px; border-bottom: 1px solid #e2e8f0; font-weight: bold;">Telemóvel (UK):</td>
-                                <td style="padding: 8px; border-bottom: 1px solid #e2e8f0;">${phone}</td>
-                            </tr>
-                            <tr>
-                                <td style="padding: 8px; border-bottom: 1px solid #e2e8f0; font-weight: bold;">Finalidade:</td>
-                                <td style="padding: 8px; border-bottom: 1px solid #e2e8f0;">${purpose}</td>
-                            </tr>
-                            <tr>
-                                <td style="padding: 8px; border-bottom: 1px solid #e2e8f0; font-weight: bold;">Forma de Pagamento:</td>
-                                <td style="padding: 8px; border-bottom: 1px solid #e2e8f0; color: #1e3a8a; font-weight: bold;">${paymentMethod}</td>
-                            </tr>
-                            <tr>
-                                <td style="padding: 8px; border-bottom: 1px solid #e2e8f0; font-weight: bold;">Montante Solicitado:</td>
-                                <td style="padding: 8px; border-bottom: 1px solid #e2e8f0; color: #1e3a8a; font-weight: bold;">£${parseFloat(valor).toLocaleString()}</td>
-                            </tr>
-                            <tr>
-                                <td style="padding: 8px; border-bottom: 1px solid #e2e8f0; font-weight: bold;">Prazo:</td>
-                                <td style="padding: 8px; border-bottom: 1px solid #e2e8f0;">${meses} Meses</td>
-                            </tr>
-                            <tr>
-                                <td style="padding: 8px; border-bottom: 1px solid #e2e8f0; font-weight: bold;">Prestação Mensal Estimada:</td>
-                                <td style="padding: 8px; border-bottom: 1px solid #e2e8f0; color: #d97706; font-weight: bold;">${parcela}</td>
-                            </tr>
-                            <tr>
-                                <td style="padding: 8px; border-bottom: 1px solid #e2e8f0; font-weight: bold;">Total Reembolsável:</td>
-                                <td style="padding: 8px; border-bottom: 1px solid #e2e8f0;">${total}</td>
-                            </tr>
-                        </table>
-
-                        <div style="background: #f8fafc; border: 1px solid #cbd5e1; padding: 12px; border-radius: 6px; font-size: 10px; color: #475569; margin-bottom: 20px;">
-                            <strong>Aviso Legal & Termos Aceites:</strong> O cliente confirmou a aceitação dos termos gerais e regras bancárias. Esta simulação não constitui uma oferta contratual vinculativa nem garantia de aprovação de crédito. Sujeito a verificação documental, análise de acessibilidade e enquadramento regulatório aplicável no Reino Unido. Nenhuma taxa antecipada é cobrada por esta instituição.
+                        <div style="font-size: 18px; margin-bottom: 24px;">
+                            <p style="margin: 0 0 12px 0;"><strong>Loan Account Number:</strong> ____${proposalId}____</p>
+                            <p style="margin: 0 0 12px 0;"><strong>Loan Amount:</strong> £_${parseFloat(valor).toLocaleString()}____</p>
+                            <p style="margin: 0 0 12px 0;"><strong>Total Repaid:</strong> ${total} whiting ${meses} months</p>
                         </div>
 
-                        <div style="text-align: center; font-size: 10px; color: #94a3b8; border-top: 1px solid #e2e8f0; padding-top: 10px;">
-                            Osny Finance Group | Contacto: +447841677271 | Leeds, United Kingdom
+                        <div style="border-bottom: 1.5px solid #000000; margin-bottom: 24px;"></div>
+
+                        <div style="font-size: 18px; margin-bottom: 24px;">
+                            <p style="margin: 0 0 16px 0;"><strong>1st Payment Date:</strong> ${stringPrimeiroPagamento}</p>
+                            <p style="margin: 0 0 8px 0;"><strong>Next Payment Due:</strong></p>
+                        </div>
+
+                        <div style="border-bottom: 1.5px solid #000000; margin-bottom: 12px;"></div>
+                        <div style="border-bottom: 1.5px solid #000000; margin-bottom: 30px;"></div>
+
+                        <div style="font-size: 16px; margin-bottom: 40px; color: #111111;">
+                            <p style="margin: 0;"><strong>Note:</strong> Please ensure the next payment is made on or before the due date to avoid any late fees.</p>
+                        </div>
+
+                        <div style="font-size: 17px; margin-top: 40px;">
+                            <p style="margin: 0 0 8px 0;"><strong>Signature (Lender Representative):</strong></p>
+                            <p style="margin: 0 0 20px 0; font-style: italic; font-size: 19px;">_____osny santos________________</p>
+                            <p style="margin: 0;"><strong>Date:</strong> ____${dataAtual.toLocaleDateString('pt-PT')}____</p>
                         </div>
                     </div>
                 `;
 
+                document.body.appendChild(pdfContainer);
+
                 const opt = {
-                    margin:       10,
-                    filename:     `Proposta_Osny_Finance_${proposalId}.pdf`,
+                    margin:       15,
+                    filename:     `Comprovativo_Loan_Form_${proposalId}.pdf`,
                     image:        { type: 'jpeg', quality: 0.98 },
-                    html2canvas:  { scale: 2 },
+                    html2canvas:  { scale: 2, logging: false },
                     jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
                 };
 
                 html2pdf().from(pdfContainer).set(opt).save().then(() => {
+                    document.body.removeChild(pdfContainer);
                     alert('Comprovativo gerado e descarregado com sucesso!');
+                }).catch(err => {
+                    document.body.removeChild(pdfContainer);
+                    alert('Ocorreu um erro ao gerar o PDF. Por favor tente novamente.');
                 });
             });
         });

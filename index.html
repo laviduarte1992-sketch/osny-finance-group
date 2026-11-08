@@ -94,11 +94,11 @@
                 <ul class="space-y-4 text-sm text-gray-700">
                     <li class="flex items-start gap-3">
                         <i class="fa-solid fa-check text-primary mt-1"></i>
-                        <span><strong>Microcrédito Empresarial:</strong> £500 a £5.000 para stock e fundo de maneio.</span>
+                        <span><strong>Microcrédito Empresarial:</strong> £500 a £2.000 para stock e fundo de maneio.</span>
                     </li>
                     <li class="flex items-start gap-3">
                         <i class="fa-solid fa-check text-primary mt-1"></i>
-                        <span><strong>Crédito em Dinheiro:</strong> Soluções de liquidez direta até £10.000 em conta.</span>
+                        <span><strong>Crédito em Dinheiro:</strong> Soluções de liquidez direta até £2.000 em conta.</span>
                     </li>
                     <li class="flex items-start gap-3">
                         <i class="fa-solid fa-check text-primary mt-1"></i>
@@ -128,7 +128,7 @@
                     </div>
                     <h3 class="text-lg font-bold text-secondary mb-2">Microcrédito Empresarial</h3>
                     <p class="text-sm text-gray-600 mb-4">Ideal para aquisição de stock, apoio sazonal e reforço de fundo de maneio de pequenos comerciantes.</p>
-                    <div class="text-primary font-bold text-base mb-4">£500 – £5.000 <span class="text-xs text-gray-500 font-normal">| 2 a 18 meses</span></div>
+                    <div class="text-primary font-bold text-base mb-4">£500 – £2.000 <span class="text-xs text-gray-500 font-normal">| 2 a 4 meses</span></div>
                     <a href="#simulador" class="text-sm font-semibold text-primary hover:underline flex items-center gap-1">Simular este valor &rarr;</a>
                 </div>
 
@@ -138,7 +138,7 @@
                     </div>
                     <h3 class="text-lg font-bold text-secondary mb-2">Crédito de Liquidez Direta</h3>
                     <p class="text-sm text-gray-600 mb-4">Empréstimo direto em dinheiro para cobrir despesas de tesouraria e necessidades imediatas da empresa.</p>
-                    <div class="text-primary font-bold text-base mb-4">£1.000 – £10.000 <span class="text-xs text-gray-500 font-normal">| 3 a 24 meses</span></div>
+                    <div class="text-primary font-bold text-base mb-4">£500 – £2.000 <span class="text-xs text-gray-500 font-normal">| 2 a 4 meses</span></div>
                     <a href="#simulador" class="text-sm font-semibold text-primary hover:underline flex items-center gap-1">Simular este valor &rarr;</a>
                 </div>
 
@@ -148,7 +148,7 @@
                     </div>
                     <h3 class="text-lg font-bold text-secondary mb-2">Crédito para Comerciantes</h3>
                     <p class="text-sm text-gray-600 mb-4">Soluções flexíveis em dinheiro para responder às exigências operacionais do comércio local.</p>
-                    <div class="text-primary font-bold text-base mb-4">£500 – £3.000 <span class="text-xs text-gray-500 font-normal">| 2 a 12 meses</span></div>
+                    <div class="text-primary font-bold text-base mb-4">£500 – £2.000 <span class="text-xs text-gray-500 font-normal">| 2 a 4 meses</span></div>
                     <a href="#simulador" class="text-sm font-semibold text-primary hover:underline flex items-center gap-1">Simular este valor &rarr;</a>
                 </div>
             </div>
@@ -167,20 +167,20 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
                     <div class="space-y-6">
                         <div>
-                            <label class="block text-sm font-semibold text-secondary mb-2">Valor do Empréstimo (£): <span id="valValor" class="text-primary font-bold">£5,000</span></label>
-                            <input type="range" id="inputValor" min="500" max="10000" step="100" value="5000" class="w-full h-3 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-primary">
+                            <label class="block text-sm font-semibold text-secondary mb-2">Valor do Empréstimo (£): <span id="valValor" class="text-primary font-bold">£1,000</span></label>
+                            <input type="range" id="inputValor" min="500" max="2000" step="100" value="1000" class="w-full h-3 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-primary">
                             <div class="flex justify-between text-xs text-gray-400 mt-1">
                                 <span>£500</span>
-                                <span>£10,000</span>
+                                <span>£2,000</span>
                             </div>
                         </div>
 
                         <div>
-                            <label class="block text-sm font-semibold text-secondary mb-2">Prazo de Pagamento: <span id="valMeses" class="text-primary font-bold">12 Meses</span></label>
-                            <input type="range" id="inputMeses" min="2" max="24" step="1" value="12" class="w-full h-3 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-primary">
+                            <label class="block text-sm font-semibold text-secondary mb-2">Prazo de Pagamento: <span id="valMeses" class="text-primary font-bold">3 Meses</span></label>
+                            <input type="range" id="inputMeses" min="2" max="4" step="1" value="3" class="w-full h-3 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-primary">
                             <div class="flex justify-between text-xs text-gray-400 mt-1">
                                 <span>2 Meses</span>
-                                <span>24 Meses</span>
+                                <span>4 Meses</span>
                             </div>
                         </div>
 
@@ -195,20 +195,20 @@
                             <h4 class="text-xs uppercase tracking-wider text-accent font-bold mb-4">Resumo da Simulação</h4>
                             <div class="mb-4">
                                 <span class="text-xs text-gray-400">Prestação Mensal Estimada</span>
-                                <div id="resParcela" class="text-3xl font-extrabold text-white">£445.50 /mês</div>
+                                <div id="resParcela" class="text-3xl font-extrabold text-white">£430.00 /mês</div>
                             </div>
                             <div class="border-t border-gray-800 pt-4 space-y-2 text-sm">
                                 <div class="flex justify-between">
                                     <span class="text-gray-400">Capital Solicitado:</span>
-                                    <span id="resCapital" class="font-medium">£5,000</span>
+                                    <span id="resCapital" class="font-medium">£1,000</span>
                                 </div>
                                 <div class="flex justify-between">
                                     <span class="text-gray-400">Custo Total dos Juros:</span>
-                                    <span id="resJuros" class="font-medium">£346.00</span>
+                                    <span id="resJuros" class="font-medium">£290.00</span>
                                 </div>
                                 <div class="flex justify-between border-t border-gray-800 pt-2 font-bold">
                                     <span>Montante Total Reembolsável:</span>
-                                    <span id="resTotal" class="text-accent">£5,346.00</span>
+                                    <span id="resTotal" class="text-accent">£1,290.00</span>
                                 </div>
                             </div>
                         </div>
@@ -398,8 +398,8 @@
             const resTotal = document.getElementById('resTotal');
 
             function calcularEmprestimo() {
-                const valor = parseFloat(inputValor.value) || 5000;
-                const meses = parseInt(inputMeses.value) || 12;
+                const valor = parseFloat(inputValor.value) || 1000;
+                const meses = parseInt(inputMeses.value) || 3;
                 
                 valValor.textContent = '£' + valor.toLocaleString();
                 valMeses.textContent = meses + (meses === 1 ? ' Mês' : ' Meses');

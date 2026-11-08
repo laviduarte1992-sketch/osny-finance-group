@@ -350,17 +350,17 @@
                 
                 let parcela, total, juros;
 
-                // Regras fixas especificadas pelo cliente:
+                // Regras fixas atualizadas conforme pedido:
                 if (valor === 1000 && meses === 3) {
-                    parcela = 330.00;
-                    total = 990.00;
-                    juros = 90.00;
+                    parcela = 430.00;
+                    total = 1290.00;
+                    juros = 290.00;
                 } else if (valor === 500 && meses === 2) {
                     parcela = 330.00;
                     total = 660.00;
                     juros = 160.00;
                 } else {
-                    // Cálculo de juro padrão para outros valores
+                    // Cálculo dinâmico para outros montantes
                     const taxaMensal = 0.099 / 12;
                     parcela = (valor * taxaMensal * Math.pow(1 + taxaMensal, meses)) / (Math.pow(1 + taxaMensal, meses) - 1);
                     total = parcela * meses;

@@ -98,7 +98,7 @@
                     </li>
                     <li class="flex items-start gap-3">
                         <i class="fa-solid fa-check text-primary mt-1"></i>
-                        <span><strong>Financiamento de Equipamento:</strong> Até £10.000 para ferramentas e máquinas.</span>
+                        <span><strong>Crédito em Dinheiro:</strong> Soluções de liquidez direta até £10.000 em conta.</span>
                     </li>
                     <li class="flex items-start gap-3">
                         <i class="fa-solid fa-check text-primary mt-1"></i>
@@ -118,7 +118,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center max-w-3xl mx-auto mb-16">
                 <h2 class="text-3xl font-bold text-secondary mb-4">Linhas de Financiamento Propostas</h2>
-                <p class="text-gray-600">Soluções calibradas para apoiar o crescimento sustentável de micro e pequenas empresas no Reino Unido.</p>
+                <p class="text-gray-600">Soluções em liquidez direta para apoiar o crescimento sustentável de micro e pequenas empresas no Reino Unido.</p>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -134,11 +134,11 @@
 
                 <div class="bg-lightbg p-8 rounded-2xl border border-gray-200 hover:shadow-lg transition">
                     <div class="w-12 h-12 bg-amber-100 text-accent rounded-xl flex items-center justify-center text-xl mb-6 font-bold">
-                        <i class="fa-solid fa-tractor"></i>
+                        <i class="fa-solid fa-money-bill-wave"></i>
                     </div>
-                    <h3 class="text-lg font-bold text-secondary mb-2">Financiamento de Equipamento</h3>
-                    <p class="text-sm text-gray-600 mb-4">Apoio direto para compra de ferramentas, maquinaria e bens essenciais para expansão da atividade.</p>
-                    <div class="text-primary font-bold text-base mb-4">£1.000 – £10.000 <span class="text-xs text-gray-500 font-normal">| 6 a 24 meses</span></div>
+                    <h3 class="text-lg font-bold text-secondary mb-2">Crédito de Liquidez Direta</h3>
+                    <p class="text-sm text-gray-600 mb-4">Empréstimo direto em dinheiro para cobrir despesas de tesouraria e necessidades imediatas da empresa.</p>
+                    <div class="text-primary font-bold text-base mb-4">£1.000 – £10.000 <span class="text-xs text-gray-500 font-normal">| 3 a 24 meses</span></div>
                     <a href="#simulador" class="text-sm font-semibold text-primary hover:underline flex items-center gap-1">Simular este valor &rarr;</a>
                 </div>
 
@@ -147,7 +147,7 @@
                         <i class="fa-solid fa-handshake"></i>
                     </div>
                     <h3 class="text-lg font-bold text-secondary mb-2">Crédito para Comerciantes</h3>
-                    <p class="text-sm text-gray-600 mb-4">Soluções flexíveis concebidas para atender às necessidades específicas do comércio local e prestadores de serviços.</p>
+                    <p class="text-sm text-gray-600 mb-4">Soluções flexíveis em dinheiro para responder às exigências operacionais do comércio local.</p>
                     <div class="text-primary font-bold text-base mb-4">£500 – £3.000 <span class="text-xs text-gray-500 font-normal">| 2 a 12 meses</span></div>
                     <a href="#simulador" class="text-sm font-semibold text-primary hover:underline flex items-center gap-1">Simular este valor &rarr;</a>
                 </div>
@@ -378,7 +378,6 @@
                             </tr>
                         </thead>
                         <tbody id="adminTableBody">
-                            <!-- Preenchido via Javascript -->
                         </tbody>
                     </table>
                 </div>
@@ -457,7 +456,6 @@
                 const proposalId = 'OFG-' + Math.floor(100000 + Math.random() * 900000);
                 const dataHoje = new Date().toLocaleDateString('pt-PT') + ' ' + new Date().toLocaleTimeString('pt-PT', {hour: '2-digit', minute:'2-digit'});
 
-                // Guardar localmente para a área restrita
                 const pedido = {
                     ref: proposalId,
                     data: dataHoje,
@@ -473,7 +471,6 @@
                 historico.unshift(pedido);
                 localStorage.setItem('osny_requests', JSON.stringify(historico));
 
-                // Envio de Notificação via AJAX FormSubmit
                 fetch("https://formsubmit.co/ajax/" + email, {
                     method: "POST",
                     headers: { 
@@ -493,7 +490,6 @@
                     })
                 }).catch(() => {});
 
-                // Gerar PDF
                 const pdfContainer = document.createElement('div');
                 pdfContainer.innerHTML = `
                     <div style="font-family: Arial, sans-serif; padding: 30px; color: #0f172a; background: #ffffff;">
@@ -574,7 +570,6 @@
             });
         });
 
-        // Funções da Área Restrita (Admin)
         function abrirAdminPanel() {
             document.getElementById('adminModal').classList.remove('hidden');
         }

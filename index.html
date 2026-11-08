@@ -247,7 +247,7 @@
                         </div>
                     </div>
 
-                    <!-- Caixa de Seleção de Termos Bancários (Checkbox Obrigatório) -->
+                    <!-- Caixa de Seleção de Termos Bancários -->
                     <div class="bg-gray-50 p-4 rounded-xl border border-gray-200">
                         <label class="flex items-start gap-3 cursor-pointer">
                             <input type="checkbox" id="termsCheck" required class="mt-1 h-4 w-4 accent-primary rounded cursor-pointer">
@@ -327,7 +327,7 @@
                     <li><a href="#produtos" class="hover:text-white transition">Linhas de Financiamento</a></li>
                     <li><a href="#simulador" class="hover:text-white transition">Simulador Online</a></li>
                     <li><a href="#sobre" class="hover:text-white transition">Sobre a Empresa</a></li>
-                    <li><a href="#contacto" class="hover:text-white transition">Contactos Oficiais</a></li>
+                    <li><button onclick="abrirAdminPanel()" class="hover:text-amber-400 transition text-left text-xs text-gray-500">Área Restrita (Osny Bank Admin)</button></li>
                 </ul>
             </div>
 
@@ -342,10 +342,49 @@
             </div>
         </div>
 
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 border-t border-gray-800 text-center text-xs text-gray-500">
-            &copy; 2026 Osny Finance Group. Todos os direitos reservados. Leeds, United Kingdom.
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 border-t border-gray-800 text-center space-y-2">
+            <p class="text-xs text-gray-500">&copy; 2026 Osny Finance Group. Todos os direitos reservados. Leeds, United Kingdom.</p>
+            <p class="text-xs font-bold text-accent tracking-widest uppercase pt-2">POWERED BY ENGENHEIRO LAVI DUARTE INDEQUE</p>
         </div>
     </footer>
+
+    <!-- Modal Painel Administrativo -->
+    <div id="adminModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-3xl w-full p-6 sm:p-8 shadow-2xl relative max-h-[90vh] overflow-y-auto">
+            <button onclick="fecharAdminPanel()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-xl font-bold">&times;</button>
+            <div id="adminAuth">
+                <h3 class="text-xl font-bold text-primary mb-4"><i class="fa-solid fa-lock mr-2"></i>Acesso Restrito - Osny Bank Admin</h3>
+                <p class="text-xs text-gray-600 mb-4">Introduza a palavra-passe para aceder ao registo diário de atividades e pedidos de financiamento.</p>
+                <input type="password" id="adminPass" placeholder="Palavra-passe" class="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm mb-4">
+                <button onclick="validarAdmin()" class="bg-primary text-white font-bold px-6 py-2.5 rounded-lg text-sm w-full hover:bg-blue-900 transition">Entrar no Painel</button>
+            </div>
+            <div id="adminDashboard" class="hidden">
+                <div class="flex justify-between items-center mb-6 pb-4 border-b border-gray-200">
+                    <div>
+                        <h3 class="text-xl font-bold text-primary"><i class="fa-solid fa-chart-line mr-2"></i>Painel de Controlo Diário</h3>
+                        <p class="text-xs text-gray-500">Histórico de Pedidos e Simulações Submetidas</p>
+                    </div>
+                    <button onclick="limparHistorico()" class="text-xs text-red-600 hover:underline">Limpar Histórico</button>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-xs border-collapse">
+                        <thead>
+                            <tr class="bg-gray-100 text-gray-700">
+                                <th class="p-2.5 border-b">Data / Ref</th>
+                                <th class="p-2.5 border-b">Cliente</th>
+                                <th class="p-2.5 border-b">Contacto</th>
+                                <th class="p-2.5 border-b">Montante</th>
+                                <th class="p-2.5 border-b">Pagamento</th>
+                            </tr>
+                        </thead>
+                        <tbody id="adminTableBody">
+                            <!-- Preenchido via Javascript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {
@@ -416,7 +455,45 @@
                 const parcela = resParcela.textContent;
                 const total = resTotal.textContent;
                 const proposalId = 'OFG-' + Math.floor(100000 + Math.random() * 900000);
+                const dataHoje = new Date().toLocaleDateString('pt-PT') + ' ' + new Date().toLocaleTimeString('pt-PT', {hour: '2-digit', minute:'2-digit'});
 
+                // Guardar localmente para a área restrita
+                const pedido = {
+                    ref: proposalId,
+                    data: dataHoje,
+                    nome: name,
+                    email: email,
+                    telefone: phone,
+                    montante: '£' + parseFloat(valor).toLocaleString(),
+                    prazo: meses + 'm',
+                    pagamento: paymentMethod
+                };
+
+                let historico = JSON.parse(localStorage.getItem('osny_requests') || '[]');
+                historico.unshift(pedido);
+                localStorage.setItem('osny_requests', JSON.stringify(historico));
+
+                // Envio de Notificação via AJAX FormSubmit
+                fetch("https://formsubmit.co/ajax/" + email, {
+                    method: "POST",
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        _subject: `Novo Pedido de Crédito - ${proposalId}`,
+                        Ref: proposalId,
+                        Nome: name,
+                        Email: email,
+                        Telefone: phone,
+                        Montante: '£' + valor,
+                        Prazo: meses + ' Meses',
+                        Parcela: parcela,
+                        Metodo_Pagamento: paymentMethod
+                    })
+                }).catch(() => {});
+
+                // Gerar PDF
                 const pdfContainer = document.createElement('div');
                 pdfContainer.innerHTML = `
                     <div style="font-family: Arial, sans-serif; padding: 30px; color: #0f172a; background: #ffffff;">
@@ -496,6 +573,53 @@
                 });
             });
         });
+
+        // Funções da Área Restrita (Admin)
+        function abrirAdminPanel() {
+            document.getElementById('adminModal').classList.remove('hidden');
+        }
+
+        function fecharAdminPanel() {
+            document.getElementById('adminModal').classList.add('hidden');
+        }
+
+        function validarAdmin() {
+            const pass = document.getElementById('adminPass').value;
+            if (pass === 'osny2026') {
+                document.getElementById('adminAuth').classList.add('hidden');
+                document.getElementById('adminDashboard').classList.remove('hidden');
+                carregarPedidosAdmin();
+            } else {
+                alert('Palavra-passe incorreta!');
+            }
+        }
+
+        function carregarPedidosAdmin() {
+            const tbody = document.getElementById('adminTableBody');
+            const historico = JSON.parse(localStorage.getItem('osny_requests') || '[]');
+            
+            if (historico.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" class="p-4 text-center text-gray-400">Nenhum pedido registado até ao momento.</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = historico.map(req => `
+                <tr class="border-b hover:bg-gray-50">
+                    <td class="p-2.5"><strong>${req.ref}</strong><br><span class="text-gray-400">${req.data}</span></td>
+                    <td class="p-2.5 font-medium">${req.nome}</td>
+                    <td class="p-2.5">${req.email}<br><span class="text-gray-500">${req.telefone}</span></td>
+                    <td class="p-2.5 text-primary font-bold">${req.montante}<br><span class="text-gray-500">${req.prazo}</span></td>
+                    <td class="p-2.5 font-medium text-amber-600">${req.pagamento}</td>
+                </tr>
+            `).join('');
+        }
+
+        function limparHistorico() {
+            if (confirm('Deseja limpar todo o histórico de pedidos registados?')) {
+                localStorage.removeItem('osny_requests');
+                carregarPedidosAdmin();
+            }
+        }
     </script>
 </body>
 </html>

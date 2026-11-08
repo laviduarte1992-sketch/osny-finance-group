@@ -237,6 +237,24 @@
                                 <option value="Outras Necessidades Elegíveis">Outras Necessidades Elegíveis</option>
                             </select>
                         </div>
+                        <div class="sm:col-span-2">
+                            <label class="block text-xs font-semibold text-gray-700 mb-1">Opção Preferencial de Pagamento *</label>
+                            <select id="clientPaymentMethod" required class="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-primary">
+                                <option value="Débito Direto (Direct Debit UK)">Débito Direto (Direct Debit UK)</option>
+                                <option value="Transferência Bancária (Bank Transfer)">Transferência Bancária (Bank Transfer)</option>
+                                <option value="Cartão de Crédito / Débito">Cartão de Crédito / Débito</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Caixa de Seleção de Termos Bancários (Checkbox Obrigatório) -->
+                    <div class="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                        <label class="flex items-start gap-3 cursor-pointer">
+                            <input type="checkbox" id="termsCheck" required class="mt-1 h-4 w-4 accent-primary rounded cursor-pointer">
+                            <span class="text-xs text-gray-600 leading-relaxed">
+                                <strong>Li e aceito todas as regras e condições bancárias.</strong> Declaro que compreendi os termos da pré-proposta, a política de privacidade (UK GDPR) e autorizo o tratamento de dados para verificação de acessibilidade de crédito pelo Osny Finance Group.
+                            </span>
+                        </label>
                     </div>
 
                     <button type="submit" class="w-full bg-accent hover:bg-amber-600 text-white font-bold py-3.5 rounded-xl transition shadow-lg flex items-center justify-center gap-2">
@@ -350,7 +368,6 @@
                 
                 let parcela, total, juros;
 
-                // Regras fixas atualizadas conforme pedido:
                 if (valor === 1000 && meses === 3) {
                     parcela = 430.00;
                     total = 1290.00;
@@ -360,7 +377,6 @@
                     total = 660.00;
                     juros = 160.00;
                 } else {
-                    // Cálculo dinâmico para outros montantes
                     const taxaMensal = 0.099 / 12;
                     parcela = (valor * taxaMensal * Math.pow(1 + taxaMensal, meses)) / (Math.pow(1 + taxaMensal, meses) - 1);
                     total = parcela * meses;
@@ -383,10 +399,17 @@
             document.getElementById('loanForm').addEventListener('submit', function(e) {
                 e.preventDefault();
 
+                const termsCheck = document.getElementById('termsCheck');
+                if (!termsCheck.checked) {
+                    alert('Por favor, confirme que leu e aceita as regras antes de continuar.');
+                    return;
+                }
+
                 const name = document.getElementById('clientName').value;
                 const email = document.getElementById('clientEmail').value;
                 const phone = document.getElementById('clientPhone').value;
                 const purpose = document.getElementById('clientPurpose').value;
+                const paymentMethod = document.getElementById('clientPaymentMethod').value;
                 
                 const valor = inputValor.value;
                 const meses = inputMeses.value;
@@ -429,6 +452,10 @@
                                 <td style="padding: 8px; border-bottom: 1px solid #e2e8f0;">${purpose}</td>
                             </tr>
                             <tr>
+                                <td style="padding: 8px; border-bottom: 1px solid #e2e8f0; font-weight: bold;">Forma de Pagamento:</td>
+                                <td style="padding: 8px; border-bottom: 1px solid #e2e8f0; color: #1e3a8a; font-weight: bold;">${paymentMethod}</td>
+                            </tr>
+                            <tr>
                                 <td style="padding: 8px; border-bottom: 1px solid #e2e8f0; font-weight: bold;">Montante Solicitado:</td>
                                 <td style="padding: 8px; border-bottom: 1px solid #e2e8f0; color: #1e3a8a; font-weight: bold;">£${parseFloat(valor).toLocaleString()}</td>
                             </tr>
@@ -447,7 +474,7 @@
                         </table>
 
                         <div style="background: #f8fafc; border: 1px solid #cbd5e1; padding: 12px; border-radius: 6px; font-size: 10px; color: #475569; margin-bottom: 20px;">
-                            <strong>Aviso Legal:</strong> Esta simulação não constitui uma oferta contratual vinculativa nem garantia de aprovação de crédito. Sujeito a verificação documental, análise de acessibilidade e enquadramento regulatório aplicável no Reino Unido. Nenhuma taxa antecipada é cobrada por esta instituição.
+                            <strong>Aviso Legal & Termos Aceites:</strong> O cliente confirmou a aceitação dos termos gerais e regras bancárias. Esta simulação não constitui uma oferta contratual vinculativa nem garantia de aprovação de crédito. Sujeito a verificação documental, análise de acessibilidade e enquadramento regulatório aplicável no Reino Unido. Nenhuma taxa antecipada é cobrada por esta instituição.
                         </div>
 
                         <div style="text-align: center; font-size: 10px; color: #94a3b8; border-top: 1px solid #e2e8f0; padding-top: 10px;">

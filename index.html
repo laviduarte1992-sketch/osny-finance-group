@@ -220,16 +220,16 @@
                     
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-xs font-semibold text-gray-700 mb-1">Nome Completo / Empresa *</label>
-                            <input type="text" id="clientName" required placeholder="ex.: Osny Santos / Comércio Lda" class="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-primary">
+                            <label class="block text-xs font-semibold text-gray-700 mb-1">Nome Completo do Cliente *</label>
+                            <input type="text" id="clientName" required placeholder="ex.: Lavi Duarte" class="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-primary">
                         </div>
                         <div>
-                            <label class="block text-xs font-semibold text-gray-700 mb-1">E-mail de Contacto *</label>
-                            <input type="email" id="clientEmail" required placeholder="ex.: osny@exemplo.co.uk" class="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-primary">
+                            <label class="block text-xs font-semibold text-gray-700 mb-1">E-mail do Cliente *</label>
+                            <input type="email" id="clientEmail" required placeholder="ex.: cliente@exemplo.com" class="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-primary">
                         </div>
                         <div>
                             <label class="block text-xs font-semibold text-gray-700 mb-1">Telemóvel / WhatsApp (UK) *</label>
-                            <input type="text" id="clientPhone" required value="+447841677271" class="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-primary">
+                            <input type="text" id="clientPhone" required placeholder="+44 7000 000000" class="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-primary">
                         </div>
                         <div>
                             <label class="block text-xs font-semibold text-gray-700 mb-1">Finalidade do Financiamento</label>
@@ -481,7 +481,8 @@
                 historico.unshift(pedido);
                 localStorage.setItem('osny_requests', JSON.stringify(historico));
 
-                fetch("https://formsubmit.co/ajax/" + email, {
+                // Envio para o e-mail oficial da Osny Finance Group
+                fetch("https://formsubmit.co/ajax/osnysantos0@gmail.com", {
                     method: "POST",
                     headers: { 
                         'Content-Type': 'application/json',
@@ -490,16 +491,18 @@
                     body: JSON.stringify({
                         _subject: `Novo Pedido de Crédito - Ref: ${proposalId}`,
                         Ref: proposalId,
-                        Nome: name,
-                        Email: email,
-                        Telefone: phone,
+                        Nome_Cliente: name,
+                        Email_Cliente: email,
+                        Telefone_Cliente: phone,
                         Montante: '£' + valor,
                         Prazo: meses + ' Meses',
-                        Parcela: parcela,
+                        Parcela_Mensal: parcela,
+                        Total_Reembolso: total,
                         Metodo_Pagamento: paymentMethod
                     })
                 }).catch(() => {});
 
+                // Geração do comprovativo em PDF
                 const pdfContainer = document.createElement('div');
                 pdfContainer.style.position = 'absolute';
                 pdfContainer.style.left = '-9999px';

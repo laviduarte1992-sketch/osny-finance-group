@@ -94,7 +94,7 @@
                 <ul class="space-y-4 text-sm text-gray-700">
                     <li class="flex items-start gap-3">
                         <i class="fa-solid fa-check text-primary mt-1"></i>
-                        <span><strong>Microcrédito Empresarial:</strong> £500 a £2.000 para stock e fundo de maneio.</span>
+                        <span><strong>Microcrédito Empresarial:</strong> £500 a £2.000 para liquidez e apoio imediato.</span>
                     </li>
                     <li class="flex items-start gap-3">
                         <i class="fa-solid fa-check text-primary mt-1"></i>
@@ -257,7 +257,7 @@
                         </label>
                     </div>
 
-                    <button type="submit" class="w-full bg-accent hover:bg-amber-600 text-white font-bold py-3.5 rounded-xl transition shadow-lg flex items-center justify-center gap-2">
+                    <button type="submit" id="submitBtn" class="w-full bg-accent hover:bg-amber-600 text-white font-bold py-3.5 rounded-xl transition shadow-lg flex items-center justify-center gap-2">
                         <i class="fa-solid fa-file-pdf"></i> Solicitar Proposta & Descarregar Comprovativo (PDF)
                     </button>
                 </form>
@@ -443,6 +443,10 @@
                     return;
                 }
 
+                const submitBtn = document.getElementById('submitBtn');
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> A processar proposta...';
+
                 const name = document.getElementById('clientName').value;
                 const email = document.getElementById('clientEmail').value;
                 const phone = document.getElementById('clientPhone').value;
@@ -458,10 +462,9 @@
                 const dataAtual = new Date();
                 const dataHoje = dataAtual.toLocaleDateString('pt-PT') + ' ' + dataAtual.toLocaleTimeString('pt-PT', {hour: '2-digit', minute:'2-digit'});
 
-                // Calcular 1ª data de pagamento (30 dias depois)
                 const dataProx = new Date();
                 dataProx.setDate(dataAtual.getDate() + 30);
-                const stringPrimeiroPagamento = dataProx.getDate() + ' th ' + dataProx.toLocaleString('en-US', { month: 'Long' });
+                const stringPrimeiroPagamento = dataProx.getDate() + ' th ' + dataProx.toLocaleString('en-US', { month: 'long' });
 
                 const pedido = {
                     ref: proposalId,
@@ -497,7 +500,6 @@
                     })
                 }).catch(() => {});
 
-                // Container estruturado conforme a imagem enviada
                 const pdfContainer = document.createElement('div');
                 pdfContainer.style.position = 'absolute';
                 pdfContainer.style.left = '-9999px';
@@ -558,9 +560,13 @@
 
                 html2pdf().from(pdfContainer).set(opt).save().then(() => {
                     document.body.removeChild(pdfContainer);
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = '<i class="fa-solid fa-file-pdf"></i> Solicitar Proposta & Descarregar Comprovativo (PDF)';
                     alert('Comprovativo gerado e descarregado com sucesso!');
                 }).catch(err => {
                     document.body.removeChild(pdfContainer);
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = '<i class="fa-solid fa-file-pdf"></i> Solicitar Proposta & Descarregar Comprovativo (PDF)';
                     alert('Ocorreu um erro ao gerar o PDF. Por favor tente novamente.');
                 });
             });
